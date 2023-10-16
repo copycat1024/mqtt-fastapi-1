@@ -14,7 +14,7 @@ services:
   db:
     build: docker/db
     volumes:
-      - ./docker/db/cache:/var/lib/postgresql/data/
+      - ./docker/db/tmp:/var/lib/postgresql/data/
     ports:
       - '5400:5432'
     expose:
@@ -33,4 +33,4 @@ services:
       - mosquitto
       - db
     environment:
-      - TEST=123
+      - DB_URL=postgres://webster:pass123@db:5432/backend

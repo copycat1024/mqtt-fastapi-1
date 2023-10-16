@@ -7,12 +7,10 @@ import json
 def create_logger(name: str) -> logging.Logger:
     json_file = f"./log.{name}.json"
     if os.path.exists(json_file):
-        print(json_file)
         with open(json_file, "rt") as f:
             config = json.load(f)
             logging.config.dictConfig(config)
     else:
-        print("def")
         logging.basicConfig(level=logging.INFO)
 
     return logging.getLogger(name)

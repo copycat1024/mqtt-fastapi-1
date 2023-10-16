@@ -1,66 +1,39 @@
-from fastapi import FastAPI, Query, HTTPException, Request
-from tortoise.contrib.fastapi import register_tortoise
-from db.model import Message as DbMessage
-from util.model import Message
 import logging
-from typing import Annotated
+import os
 
-DB_URL = "postgres://webster:pass123@db:5432/backend"
+from fastapi import FastAPI
+from tortoise.contrib.fastapi import register_tortoise
+from api.route import v1_router, private_router
+from api.middleware import HttpLog
 
 
 def create_application() -> FastAPI:
+    # create the FastAPI application
     logger = logging.getLogger("api")
-    application = FastAPI(title="MQTT - FastAPI", version="0.1.0")
+    application = FastAPI(title="Message REST", version="1.0")
 
+    # mount the router
+    application.include_router(private_router)
+    application.include_router(v1_router)
+
+    # mount the middleware
+    application.add_middleware(HttpLog)
+
+    # hook up startup event
     @application.on_event("startup")
     async def startup_event() -> None:
-        logger.info("Initialing database...")
+        logger.info(f"Initialing database url ...")
         register_tortoise(
             app,
-            db_url=DB_URL,
+            db_url=os.getenv("DB_URL"),
             modules={"models": ["db.model"]},
         )
         logger.info("Database initialization done.")
 
+    # hook up shutdown event
     @application.on_event("shutdown")
     async def shutdown_event() -> None:
         logger.info("Shutting down...")
-
-    @application.get("/")
-    async def root():
-        return {"message": "Hello World"}
-
-    @application.get("/v1/messages")
-    async def read_all_messages(
-        limit: Annotated[int, Query(ge=0)] = 100,
-        offset: Annotated[int, Query(ge=0)] = 0,
-    ) -> list[Message]:
-        try:
-            return [
-                Message(
-                    created_at=msg.created_at,
-                    charger_id=msg.charger_id,
-                    connector_id=msg.connector_id,
-                    session_id=msg.session_id,
-                    payload=msg.payload,
-                )
-                async for msg in DbMessage.all().limit(limit).offset(offset)
-            ]
-
-        except Exception as e:
-            logger.info(e)
-            raise HTTPException(status_code=500, detail="Internal server error")
-
-    @application.middleware("http")
-    async def log_requests(request: Request, call_next):
-        header = f"{request.method} {request.url.path}"
-        logger.info(f"{header} processing...")
-
-        response = await call_next(request)
-
-        logger.info(f"{header} done.")
-
-        return response
 
     return application
 
