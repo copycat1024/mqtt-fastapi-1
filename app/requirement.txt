@@ -1,0 +1,7 @@
+tortoise-orm
+paho-mqtt
+pydantic
+asyncpg
+gunicorn
+uvicorn
+fastapi

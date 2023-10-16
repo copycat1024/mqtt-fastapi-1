@@ -1,0 +1,30 @@
+{
+    "version": 1,
+    "root": {
+        "level": "INFO",
+        "handlers": [
+            "stdout"
+        ]
+    },
+    "loggers": {
+        "mqtt": {
+            "level": "INFO",
+            "propagate": true,
+            "qualname": "mqtt"
+        }
+    },
+    "handlers": {
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "formatter": "generic",
+            "stream": "ext://sys.stdout"
+        }
+    },
+    "formatters": {
+        "generic": {
+            "format": "[%(asctime)s] [%(process)5d %(levelname)6s %(name)s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S %Z",
+            "class": "logging.Formatter"
+        }
+    }
+}

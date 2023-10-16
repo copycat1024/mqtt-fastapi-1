@@ -1,0 +1,90 @@
+{
+    "version": 1,
+    "root": {
+        "level": "INFO",
+        "handlers": [
+            "stdout"
+        ]
+    },
+    "loggers": {
+        "asyncio": {
+            "level": "INFO",
+            "propagate": true,
+            "qualname": "asyncio"
+        },
+        "gunicorn": {
+            "level": "INFO",
+            "propagate": true,
+            "qualname": "gunicorn"
+        },
+        "gunicorn.access": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "gunicorn.access"
+        },
+        "gunicorn.error": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "gunicorn.error"
+        },
+        "gunicorn.http": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "gunicorn.http"
+        },
+        "gunicorn.http.wsgi": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "gunicorn.http.wsgi"
+        },
+        "uvicorn": {
+            "level": "ERROR",
+            "propagate": true,
+            "qualname": "uvicorn"
+        },
+        "uvicorn.access": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "uvicorn.access"
+        },
+        "uvicorn.error": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "uvicorn.error"
+        },
+        "tortoise": {
+            "level": "ERROR",
+            "propagate": true,
+            "qualname": "tortoise"
+        },
+        "tortoise.db_client": {
+            "level": "NOTSET",
+            "propagate": true,
+            "qualname": "tortoise.db_client"
+        },
+        "fastapi": {
+            "level": "INFO",
+            "propagate": true,
+            "qualname": "fastapi"
+        },
+        "api": {
+            "level": "INFO",
+            "propagate": true,
+            "qualname": "api"
+        }
+    },
+    "handlers": {
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "formatter": "generic",
+            "stream": "ext://sys.stdout"
+        }
+    },
+    "formatters": {
+        "generic": {
+            "format": "[%(asctime)s] [%(process)5d %(levelname)6s %(name)s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S %Z",
+            "class": "logging.Formatter"
+        }
+    }
+}
