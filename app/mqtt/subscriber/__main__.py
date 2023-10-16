@@ -18,7 +18,6 @@ filters = [
 
 async def init_db():
     await Tortoise.init(db_url=os.getenv("DB_URL"), modules={"models": ["db.model"]})
-    await Tortoise.generate_schemas()
 
 
 def on_connect(client, obj, flags, rc):
